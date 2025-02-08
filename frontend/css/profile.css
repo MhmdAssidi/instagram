@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.username {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.stats span {
+    margin-right: 15px;
+}
+
+.bio {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Posts Container - Flexbox */
+.posts-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to the next row */
+    gap: 15px; /* Spacing between posts */
+    justify-content: flex-start; /* Align posts like Instagram */
+}
+
+/* Individual Post */
+.post {
+    width: 30%; /* Each post takes ~30% width */
+    min-width: 250px; /* Ensures a minimum width */
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+
+
+.post-img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.post-details {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.post-actions {
+    font-size: 16px;
+    color: #333;
+}
+
+.post-actions i {
+    font-size: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.post-actions span {
+  
+    font-size: 14px;
+}
+
+.post-bio {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+
+
+
+
+
+
+
+

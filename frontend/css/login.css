@@ -1,0 +1,117 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Center container */
+body {
+    background-color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+.login-box h1{
+    margin-bottom:15px;
+}
+/* Login box */
+.container {
+    text-align: center;
+}
+
+.login-box {
+    background-color: #fff;
+    border: 1px solid #dbdbdb;
+    padding: 30px;
+    width: 350px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.logo {
+    width: 180px;
+    margin-bottom: 20px;
+}
+
+/* Input fields */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    background-color: #fafafa;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0095f6;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #0077c9;
+}
+
+/* OR section */
+.or-section {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.or-section .line {
+    flex: 1;
+    height: 1px;
+    background-color: #dbdbdb;
+}
+
+.or-section span {
+    margin: 0 10px;
+    color: #8e8e8e;
+    font-size: 14px;
+}
+
+/* Facebook login */
+.fb-login {
+    color: #385185;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    margin: 10px 0;
+}
+
+/* Forgot password */
+.forgot-password {
+    color: #00376b;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+/* Sign up box */
+.signup-box {
+    margin-top: 10px;
+    padding: 15px;
+    border: 1px solid #dbdbdb;
+    background-color: #fff;
+    width: 350px;
+}
+
+.signup-box p {
+    font-size: 14px;
+}
+
+.signup-box a {
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: bold;
+}

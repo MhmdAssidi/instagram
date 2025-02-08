@@ -1,0 +1,494 @@
+
+body{
+background-color: rgb(0, 0, 0);
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+margin: 0;
+padding: 0;
+overflow-x: hidden;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    height: 100vh;    
+}
+
+ul li svg{
+   
+    width: 25px;
+    height: 25px;
+    color: #ffffff;
+}
+.sidebar{
+    width: 20%;
+}
+.content{
+    width: 50%;
+    
+}
+
+.suggestions{
+    width: 30%;
+}
+.instagram{
+    color: #ffffff;
+    
+    cursor: pointer;
+}
+
+.sidebar-content{
+    text-align: center;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+   justify-content: space-around;
+   align-items: center;
+   height: 100vh;
+   border-right: 1px solid #ffffff;
+  
+    }
+
+
+.sidebar-content ul{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 70vh;
+  
+} 
+ul li{
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: center; 
+    column-gap: 20px;
+list-style-type: none;    
+cursor: pointer;
+color: #ffffff;
+font-size: 17px;
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+opacity: 0.8;
+}
+
+ul li svg{
+    color: #ffffff;
+    
+}
+ul li img{
+    color: #ffffff;
+    
+}
+
+ul li:hover{
+    background-color: #242424;
+transition: 1s;
+}
+ 
+
+
+/* /////////Second Section:///////////// */
+.content{
+   
+        display: flex;
+        flex-direction: column;
+        
+        align-items: center;
+}
+
+.stories{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 25px 0;
+    gap: 10px;
+}
+
+ .content .stories .story{ 
+     display: flex; 
+     flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+     padding-left: 5px;
+    
+    
+ } 
+.content .stories .story img{
+    width: 56px;
+    height: 56px;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 50%;
+    padding: 0;
+     cursor: pointer;
+    
+}
+
+
+.content .stories .story p{
+color: #f5f5f5;
+font-size: 12px;
+
+}
+
+.content .stories .story svg {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 7%;
+    left: 64%;
+    border-radius: 50%;
+    background-color: #dfdfdf;
+   
+  }
+
+
+/* //////////////posts://////////////// */
+
+
+
+
+.posts{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+  
+}
+
+.posts .post .headerpost{
+display:flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+}
+.posts .post .headerpost .postinfo{
+    
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    
+    width: 40%;
+    gap: 8px;
+}
+.posts .post .headerpost .postinfo .timepost{
+color: #a8a8a8;
+font-size: 12px;
+}
+
+.posts .post .headerpost .postinfo img{
+width: 40px;
+height: 40px;
+border-radius: 50%;
+border-width: 3px;
+    border-style: solid;
+    border-color: #ff0000;
+    cursor: pointer;
+}
+.posts{
+    width: 100%;
+}
+.posts .post{
+    width: 100%;
+}
+.posts .post .postCont{
+    width: 100%;
+    text-align: center;
+}
+.posts .post .postCont video{
+   width: 100%;
+    
+    cursor: pointer;
+}
+.posts .post .postCont img{
+   width: 100%;
+    cursor: pointer;
+}
+.posts .post .headerpost .postinfo p{
+    color: #ffffff;
+    display: block;
+    cursor: pointer;
+    margin: 0;
+}
+
+.posts .post .headerpost .moreoptions svg{
+    color: #ffffff;
+    cursor: pointer;
+}
+
+
+
+.posts .post .actions{
+    display: flex;
+    justify-content: space-between;
+    
+    color: #ffffff;
+    margin-top: 12px;
+}
+.posts .post .actions .threeactions svg{
+padding-right: 20px;
+cursor: pointer;
+}
+.posts .post .actions svg{ 
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.posts .post .reactions{
+    color: #ffffff;
+    margin-top: 15px;
+}
+
+.posts .post .reactions img{
+display: inline;
+
+}
+.posts .post .reactions p span{
+color: #f5f5f5;
+font-size: 14px;
+}
+
+.posts .post .comment textarea{
+    border: none;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 90%;
+    height: 18px;
+    margin-bottom: 15px;
+}
+
+
+/* ////////////////////////////////////////////////Suggestions:///////////////////////////////////////////////////////////////////////////////////// */
+
+
+.suggestions{
+    margin-left: 50px;
+    margin-top: 25px;
+}
+
+.suggestions .sugHeader{
+    display: flex;
+    justify-content: end;
+    align-items:center;
+    margin-top: 10px;
+    gap: 60px;    
+   
+ 
+}
+
+.suggestions .sugHeader .instauser{
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 10px;
+}
+
+.suggestions .sugHeader .instauser img{
+width: 44px;
+height: 44px;
+border-radius: 50%;
+}
+
+.suggestions .sugHeader .instauser .username p{
+    color: #ffffff;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+    color: #f5f5f5;
+    cursor: pointer;
+}
+
+ #shadowName{
+    color: #a8a8a8;
+    font-size: 12px;
+}
+
+.suggestions .sugHeader a{
+ text-decoration: none;
+ color: #0095f6;
+ font-size: 12px;
+ font-weight: 600;
+ padding-right: 35px;
+ cursor: pointer;
+}
+
+.suggestions .sugHeader .instauser .suggestedforyou{
+    font-size: 14px;
+    color: #a8a8a8;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin-right: 60px;
+}
+.suggestions .sugfooter .instauser .links{
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.suggestions .sugfooter .instauser .links ul li{
+    color: #737373;
+    display: inline;
+    font-size: 12px;
+}
+
+.suggestions .sugfooter .instauser .links ul li:hover{
+    text-decoration: underline;
+}
+
+.suggestions .sugfooter .instauser .links .meta{
+   
+    color: #737373;
+    font-size: 12px;
+    
+}
+.hiddenHeader{
+    display: none;
+}
+
+.hiddenHeader .notify svg{
+    color: #f5f5f5;
+}
+
+
+
+.content .hiddenNavbar{
+    display: none;
+}
+
+
+
+
+@media screen and (min-width: 1263px) {
+    .sidebar-content-1 .instaLogo{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1263px) {
+
+   .sidebar-content-1 .instaLogo{
+    margin-left: 35px;
+        
+    }
+   
+    .list-item span{
+        display: none;
+    }
+
+    .sidebar-content-1 .instagram{
+        display: none;
+    }
+}
+
+
+
+@media screen and (max-width: 1160px) {
+    .suggestions {
+        display: none;
+    }
+    .content{
+        border-left: none;
+    }
+}
+
+
+@media screen and (max-width: 880px) {
+.sidebar{
+    display: none;
+}
+.content{
+    width: 100vw;
+}
+.hiddenHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 92%;
+    border-bottom: 1px solid grey;
+    padding: 10px 0;
+}
+.hiddenHeader .notify{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 45%;
+   
+}
+
+.hiddenHeader .notify input{
+background-color: #262626;
+border: none;
+width: 70%;
+height: 3vh;
+border-radius: 4px;
+}
+.hiddenHeader .notify svg{
+    width: 20px;
+            height: 20px;
+            fill: #888;
+}
+.content{
+    border-left: none;
+    width: 90vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.content .hiddenNavbar{
+    display: block; 
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+    height: 70px; 
+    background-color: rgb(0, 0, 0);
+}
+.content .hiddenNavbar ul{
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+}
+
+@media screen and (max-width: 530px) {
+   body{
+    overflow-x: hidden;
+
+   }
+   main{
+    width: 100%;
+   }
+   .stories {
+   
+    width: 100%;
+    position: absolute;
+    top: 37px;
+    overflow-x: scroll;
+   }
+    
+    .posts{
+        margin-top: 130px;
+    }
+    .posts .post .postCont video{
+        width: 100vw;
+         
+         
+     }
+     .posts .post .postCont img{
+        width: 85vw;
+        
+     }
+}
+
