@@ -13,13 +13,16 @@ if($_SERVER['REQUEST_METHOD']!="POST"){
     }
 
 
- $userId=$_SESSION["userId"];  
 
  $content=htmlspecialchars($_POST['commentContent']);
  if($content===""){
    header("Location: ../../frontend/pages/profile.php");
 exit();
  }
+ $userId=$_POST["user_id"];  
+ $profileUser=$_POST["profileUser_id"];  
+
+
  $postId=$_POST['post_id'];
  $parentCommentId=NULL;
 $isAReply=0;
@@ -40,7 +43,7 @@ VALUES (:content, :postId, :userId, :parentCommentId, :isAReply);";
     $stmt->bindParam(':parentCommentId', $parentCommentId);
     $stmt->bindParam(':isAReply', $isAReply);
     $stmt->execute();
-    header("Location: /instagram/frontend/pages/profile.php");
+    header("Location: /instagram/frontend/pages/profile.php?userId=" . urlencode($profileUser));
  }catch (PDOException $exception) {    
     echo "error adding the comment,the error is: " . $exception->getMessage();
     exit();  

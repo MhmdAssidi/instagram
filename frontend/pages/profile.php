@@ -16,19 +16,17 @@ if (!isset($_SESSION["userId"])) {
        u.fullname, u.username, u.profile_image, u.bio 
 FROM posts p 
 INNER JOIN users u ON p.user_id = u.id 
-WHERE u.id = :id AND p.isDeleted=0 ORDER BY p.date_created DESC;
-";
+WHERE u.id = :id AND p.isDeleted=0 ORDER BY p.date_created DESC;";
     $stmt=$pdo->prepare($sql);
         $stmt->bindParam(":id",$userId);
         $stmt->execute();
-        $userAndHisPosts = $stmt->fetchAll();        
-        
-       
+        $userAndHisPosts = $stmt->fetchAll();                
         $count = count($userAndHisPosts); // get the number of posts
 
 if ($count > 0) {
     $userInfo = $userAndHisPosts[0]; 
-} else {
+} 
+else {
     // fetch user info separately if there are no posts
     $sql = "SELECT * FROM users WHERE id = :id";
         $stmt = $pdo->prepare($sql);
@@ -342,6 +340,10 @@ foreach ($userAndHisPosts as $post) {
           <!-- Comment Input Field -->
             <form class="comment-form" method="POST" action="../../backend/php/AddCommentAction.php">
                 <input type="hidden" name="post_id" value='.$post['post_id'] .'>
+                <input type="hidden" name="user_id" value='.$_SESSION['userId'] .'>
+                <input type="hidden" name="profileUser_id" value='.$_GET['userId'] .'>
+
+
                 <input type="text" name="commentContent" class="form-control comment-input" placeholder="Add a comment...">
              
             
@@ -374,9 +376,10 @@ foreach ($userAndHisPosts as $post) {
                                     echo '<p class="dateOfComment">'.htmlspecialchars($comment['created_at']).'</p>';
                                   
                                     echo '<form method="POST" action="../../backend/php/AddCommentAction.php" class="replyForm">
-                                  
+                                  <input type="hidden" name="user_id" value='.$_SESSION['userId'] .'> 
                                     <input type="hidden" name="comment_id" value='.$comment['comment_id'] .'>  
                                     <input type="hidden" name="post_id" value='.$post['post_id'] .'>  
+                                  <input type="hidden" name="profileUser_id" value='.$_GET['userId'] .'>
 
                                     <input type="text" class="replyBtn replyInput" name="commentContent" class="form-control comment-input" placeholder="Add a Reply...">
                                      <button class="_a9ze replyBtn" type="submit"><span class="x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs xt0psk2 x1i0vuye x1fhwpqd x1s688f x1roi4f4 x10wh9bi x1wdrske x8viiok x18hxmgj">Reply</span></button>
@@ -391,7 +394,9 @@ foreach ($userAndHisPosts as $post) {
                                     echo '<p class="dateOfComment">'.htmlspecialchars($comment['created_at']).'</p>';
                                   
                                     echo '<form method="POST" action="../../backend/php/AddCommentAction.php" class="replyForm">
-                                  
+                                    <input type="hidden" name="user_id" value='.$_SESSION['userId'] .'> 
+                                     <input type="hidden" name="profileUser_id" value='.$_GET['userId'] .'>
+                                    
                                     <input type="hidden" name="comment_id" value='.$comment['comment_id'] .'>  
                                     <input type="hidden" name="post_id" value='.$post['post_id'] .'>  
 
