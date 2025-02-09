@@ -9,6 +9,18 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn']!=true){
 
 $userId=$_SESSION['userId'];
 
+
+// SELECT 
+//     u.id, 
+//     u.username, 
+//     u.profile_image,  
+//     (SELECT COUNT(f2.following_id) FROM follow f2 WHERE f2.follower_id = 2) AS following_count,  -- Added comma here
+//     (SELECT COUNT(f3.follower_id) FROM follow f3 WHERE f3.following_id = 2) AS follower_count
+// FROM users u
+// WHERE u.id != 2  -- Exclude the logged-in user
+// AND u.id NOT IN (SELECT following_id FROM follow WHERE follower_id = 2)  -- Exclude already followed users
+// ORDER BY u.date_registered DESC;
+
 try{
       //retreive the users who are not followed by the logged in user:
     $sql="

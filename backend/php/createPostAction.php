@@ -25,18 +25,18 @@ $target = __DIR__ . "/../../frontend/postImages/" . $image_name;
 
 //check file size
 if($_FILES['profile']['size'] > 500000){  //500,000 bytes, which is 500 KB 
-    header("Location: /instagram/frontend/pages/editProfile.php?err=2");
+    header("Location: /instagram/frontend/pages/createPost.php?err=2");
     exit();
 }
 
 //Check if real image
 if(!getimagesize($_FILES['profile']['tmp_name'])){  //if the method can not return width and height for the image.
-    header("Location: /instagram/frontend/pages/editProfile.php");
+    header("Location: /instagram/frontend/pages/createPost.php");
     exit();
 }
 
     if(!move_uploaded_file($_FILES['profile']['tmp_name'], $target)){  //if not move_uploaded_file to target
-        header("Location: /instagram/frontend/pages/editProfile.php?err=4");
+        header("Location: /instagram/frontend/pages/createPost.php?err=4");
         exit();
     }
 
@@ -50,7 +50,7 @@ if(!getimagesize($_FILES['profile']['tmp_name'])){  //if the method can not retu
     $stmt->bindParam(":user_id", $userId);
 
     $stmt->execute();
-    header("Location: /instagram/frontend/pages/profile.php");
+    header("Location: /instagram/frontend/pages/profile.php?userId=" . urlencode($userId));
 
 
 

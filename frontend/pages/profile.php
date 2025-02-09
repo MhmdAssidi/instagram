@@ -12,12 +12,28 @@ if (!isset($_SESSION["userId"])) {
  //I make inner join between posts and users on user id to have the userinfo and post info of the user.  
  //this sql may return one row or many rows according to user how many post he has.
  //each post returned the info of the user will be returned with it, so when we make fetchAll the result is assoc array where from first index we can have all the info.
- $sql="SELECT p.post_id, p.image_post, p.caption, p.user_id, p.date_created, 
-       u.fullname, u.username, u.profile_image, u.bio 
+ 
+ //I added to have one sql the two lines to calculate the following and followers for the user who will enter to his profile
+ $sql="SELECT 
+    p.post_id, 
+    p.image_post, 
+    p.caption, 
+    p.user_id, 
+    p.date_created, 
+    u.fullname, 
+    u.username, 
+    u.profile_image, 
+    u.bio, 
+    (SELECT COUNT(f.following_id) FROM follow f WHERE f.follower_id = :id) AS followings_count,
+    (SELECT COUNT(f2.follower_id) FROM follow f2 WHERE f2.following_id = :id) AS followers_count
 FROM posts p 
 INNER JOIN users u ON p.user_id = u.id 
-WHERE u.id = :id AND p.isDeleted=0 ORDER BY p.date_created DESC;";
+WHERE u.id = :id AND p.isDeleted = 0 
+ORDER BY p.date_created DESC;
+";
     $stmt=$pdo->prepare($sql);
+        $stmt->bindParam(":id",$userId);
+        $stmt->bindParam(":id",$userId);
         $stmt->bindParam(":id",$userId);
         $stmt->execute();
         $userAndHisPosts = $stmt->fetchAll();                
@@ -70,7 +86,7 @@ else {
         justify-content: center;
     align-items: center;
     position: fixed;
-    top: 35%;
+    top: 45%;
     bottom: auto;
     right: 17%;
     width: 70%;
@@ -270,8 +286,8 @@ justify-content: space-around;
                 </div>
                 <div class="stats mt-2">
                 <span><strong><?php echo $count ?></strong> <?php echo $count == 1 ? 'post' : 'posts'; ?></span>
-                    <span><strong>10.5K</strong> followers</span>
-                    <span><strong>500</strong> following</span>
+                    <span><strong><?php echo $userInfo['followers_count']  ?></strong> followers</span>
+                    <span><strong><?php echo $userInfo['followings_count']  ?></strong> following</span>
                 </div>
                 <div class="bio mt-2">
                     <p><strong><?php echo $userInfo['username']  ?></strong><br><?php echo $userInfo['bio']  ?></p>
