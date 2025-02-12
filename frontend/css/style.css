@@ -10,7 +10,7 @@ overflow-x: hidden;
 main{
     display: flex;
     justify-content: center;
-    height: 100vh;    
+    
 }
 
 ul li svg{
@@ -274,8 +274,8 @@ font-size: 14px;
 
 .suggestions .sugHeader{
     display: flex;
-    justify-content: end;
-    align-items:center;
+    justify-content: space-around;
+    align-items: center;
     margin-top: 10px;
     gap: 60px;    
    
@@ -309,12 +309,14 @@ border-radius: 50%;
     font-size: 12px;
 }
 
+
+
 .suggestions .sugHeader a{
  text-decoration: none;
  color: #0095f6;
  font-size: 12px;
  font-weight: 600;
- padding-right: 35px;
+ 
  cursor: pointer;
 }
 

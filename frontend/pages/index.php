@@ -10,17 +10,6 @@ if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn']!=true){
 $userId=$_SESSION['userId'];
 
 
-// SELECT 
-//     u.id, 
-//     u.username, 
-//     u.profile_image,  
-//     (SELECT COUNT(f2.following_id) FROM follow f2 WHERE f2.follower_id = 2) AS following_count,  -- Added comma here
-//     (SELECT COUNT(f3.follower_id) FROM follow f3 WHERE f3.following_id = 2) AS follower_count
-// FROM users u
-// WHERE u.id != 2  -- Exclude the logged-in user
-// AND u.id NOT IN (SELECT following_id FROM follow WHERE follower_id = 2)  -- Exclude already followed users
-// ORDER BY u.date_registered DESC;
-
 try{
       //retreive the users who are not followed by the logged in user:
     $sql="
@@ -51,7 +40,18 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../css/style.css">
+<style>
+    #followBtn{
+    background: none;
+    color: #0095f6;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
+}
+</style>
 </head>
 
 <body>
@@ -75,7 +75,7 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
                     <div class="sidebar-content-2">
                         <ul>
 
-                          
+                          <a href="./index.php" style="text-decoration: none;">
                                 <li class="list-item">
                                     <svg aria-label="Home" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor"
                                         height="24" role="img" viewBox="0 0 24 24" width="24">
@@ -86,7 +86,7 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
                                     </svg>
                                     <span>Home</span>
                                 </li>
-                          
+                          </a>
 
                            
                                 <li class="list-item">
@@ -701,119 +701,21 @@ echo '
     </div>
 
         <div>
-</a>
+        </a>
 
-     <a href="#">Follow</a>
+    <form method="POST" action="../../backend/php/followAction.php">
+    <input type="hidden" name="action" id="actionInput_'. $user['id'].'" value="follow">
+  <input type="hidden" name="userId" value='. $user['id'].'>
+     <button type="button" id="followBtn" onclick="follow(event,'. $user['id']. ')">Follow</button>
+    </form>
+
         </div>
-
-
     </div>';
         }
         ?>
             
 
-            <!-- /////////////////////////////////////// -->
-
-            <!-- <div class="sugHeader">
-                <div class="instauser">
-                    <div>
-                        <img src="../images//mtvlebanon.jpg" alt="user image">
-                    </div>
-
-                    <div class="username">
-                        <p>mtvlebanon.news</p>
-                        <p id="shadowName">new to instagram</p>
-                    </div>
-
-                </div>
-
-                <div>
-                    <a href="#">Follow
-                    </a>
-                </div>
-
-
-            </div> -->
-
-
-            <!-- /////////////////////////////////////// -->
-
-
-
-            <!-- <div class="sugHeader">
-                <div class="instauser">
-                    <div>
-                        <img src="../images//mtvlebanon.jpg" alt="user image">
-                    </div>
-
-                    <div class="username">
-                        <p>mtvlebanon.news</p>
-                        <p id="shadowName">Suggested for you</p>
-                    </div>
-
-                </div>
-
-                <div>
-                    <a href="#">Follow
-                    </a>
-                </div>
-
-
-            </div> -->
-
-
-
-            <!-- /////////////////////////////////////// -->
-
-
-
-            <!-- <div class="sugHeader">
-                <div class="instauser">
-                    <div>
-                        <img src="../images//mtvlebanon.jpg" alt="user image">
-                    </div>
-
-                    <div class="username">
-                        <p>mtvlebanon.news</p>
-                        <p id="shadowName">Suggested for you</p>
-                    </div>
-
-                </div>
-
-                <div>
-                    <a href="#">Follow
-                    </a>
-                </div>
-
-
-            </div> -->
-
-            <!-- /////////////////////////////////////// -->
-
-
-<!-- 
-            <div class="sugHeader">
-                <div class="instauser">
-                    <div>
-                        <img src="../images//mtvlebanon.jpg" alt="user image">
-                    </div>
-
-                    <div class="username">
-                        <p>mtvlebanon.news</p>
-                        <p id="shadowName">Suggested for you</p>
-                    </div>
-
-                </div>
-
-                <div>
-                    <a href="#">Follow</a>
-                </div>
-
-
-            </div> -->
-
-
-
+        
             <!-- /////////////////////////////////links:////////////////////////////// -->
             <div class="sugfooter">
                 <div class="instauser">
@@ -848,6 +750,48 @@ echo '
 
     </main>
 
+    <script>
+         function follow(event,userId){
+        event.preventDefault(); // prevents page reload
+        const button = event.target; // get the clicked button
+        const isFollowing = document.getElementById("actionInput_" + userId);
+        const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+const urlencoded = new URLSearchParams();
+urlencoded.append("userId", userId);
+urlencoded.append("action", isFollowing.value); 
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: urlencoded,
+  redirect: "follow"
+  
+};
+
+fetch("http://localhost/instagram/backend/php/followAction.php", requestOptions)
+  .then((response) => response.json())
+  .then((result) =>{
+        if(result.success){
+            if(button.textContent == "Follow"){
+                button.textContent="Following";
+                isFollowing.value="unfollow"; //value becomes unfollow if user makes click again it goes to backend as unfollow
+            }
+            else{
+                button.textContent="Follow";
+                isFollowing.value="follow";
+
+            }
+        }
+        else {
+            alert(result.message);  // show error message if the follow failed
+        }
+  })
+  .catch((error) => console.error(error));
+
+}
+    </script>
 </body>
 
 </html>
