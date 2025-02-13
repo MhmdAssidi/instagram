@@ -258,7 +258,11 @@ justify-content: space-around;
 .editPostForm button{
     width: 100%;
 }
-
+#likeBtn{
+    border: none;
+    background-color: transparent;
+    
+}
 
 </style>
 </head>
@@ -307,8 +311,10 @@ justify-content: space-around;
         <div class="container">
         <div class="row">
         <?php
-        
+       
+//////////////////////////////////////////////
 foreach ($userAndHisPosts as $post) {
+
    //retreive the comments for each post:
     $postId=$post['post_id'];
        
@@ -320,6 +326,24 @@ foreach ($userAndHisPosts as $post) {
      $stmt2->execute();
      $comments = $stmt2->fetchAll();   
      $nBOfComments=count($comments);
+
+ // Check if the post is already liked by the user
+ $query = "SELECT COUNT(*) FROM likes WHERE user_id = :user_id AND post_id = :post_id";
+ $stmt = $pdo->prepare($query);
+ $stmt->bindParam(':user_id', $_SESSION['userId']);
+ $stmt->bindParam(':post_id', $postId);
+ $stmt->execute();
+ $isLiked = $stmt->fetchColumn();
+ 
+ $iconClass ='fa-regular fa-heart';
+ $inputValue='like';
+ $redColorBtn="black";
+ if($isLiked>0){ //the user like the post:
+     $iconClass='fa-solid fa-heart';
+     $inputValue='unlike';
+     $redColorBtn="red";
+ }
+ /////////////////////////////////////////////////////////////////
 
      echo '
      <!-- Post 1 -->
@@ -346,7 +370,14 @@ foreach ($userAndHisPosts as $post) {
 
             <div class="post-details">
                 <div class="post-actions d-flex align-items-center">
-                    <i class="fa-regular fa-heart"></i> <span>1,245 likes</span>
+
+                <form method="POST" action="../../backend/php/likeAction.php">
+                
+                    <input type="hidden" name="action" id="actionInput_'. $post['post_id'].'" value="'.$inputValue.'">
+                 <button type="button" id="likeBtn" onclick="like(event,'.$post['post_id'].')"><i id="actionIcon_'.$post['post_id'].'" class="'.$iconClass.'" style="color:' . $redColorBtn . ';"></i></button> <span>1,245 likes</span>
+                 </form>
+
+
                      <i class="fa-regular fa-comment ms-3" onclick="displayTaskInfo(' . $post['post_id'] . ')"></i> <span>'.$nBOfComments.' comments</span><br>
                
                     </div>
@@ -478,6 +509,59 @@ foreach ($userAndHisPosts as $post) {
 
 <script src="../javascript/profile.js"></script>
 <script src="https://kit.fontawesome.com/YOUR_UNIQUE_KIT.js" crossorigin="anonymous"></script>
+<script>
 
+function like(event,postId){
+        event.preventDefault(); // prevents page reload
+        const button = event.target; // get the clicked button
+        const isliking = document.getElementById("actionInput_" + postId);
+        const likeIcon=document.getElementById("actionIcon_"+postId);
+        const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+const urlencoded = new URLSearchParams();
+urlencoded.append("postId", postId);
+urlencoded.append("action", isliking.value); 
+
+const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: urlencoded,
+
+  
+};
+
+fetch("http://localhost/instagram/backend/php/likeAction.php", requestOptions)
+  .then((response) => response.json())
+  .then((result) =>{
+        if(result.success){
+             if(likeIcon.classList.contains("fa-regular")){
+               
+                isliking.value="unlike"; //value becomes unlike if user makes click again it goes to backend as unlike
+                likeIcon.classList.remove("fa-regular" ,"fa-heart");
+                likeIcon.classList.add("fa-solid","fa-heart");
+
+                likeIcon.style.color="red";
+
+                 }
+            else{
+                 isliking.value="like";
+                 likeIcon.classList.remove("fa-solid", "fa-heart");
+                 likeIcon.classList.add("fa-regular","fa-heart");
+                 likeIcon.style.color="black";
+                
+
+             }
+        }
+        else{
+            alert(result.message);  // show error message if the follow failed
+        }
+  })
+  .catch((error) => console.error(error));
+
+}
+
+
+</script>
 </body>
 </html>
