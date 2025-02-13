@@ -344,7 +344,14 @@ foreach ($userAndHisPosts as $post) {
      $redColorBtn="red";
  }
  /////////////////////////////////////////////////////////////////
-
+ //num of likes for each post:
+ $query = "SELECT COUNT(l.like_id) FROM likes l WHERE post_id = :post_id";
+ $stmt = $pdo->prepare($query);
+ $stmt->bindParam(':post_id', $postId);
+ $stmt->execute();
+$result=$stmt->fetch();
+$numLikes = $result[0];
+//////////////////////////////////////////////////////////////////
      echo '
      <!-- Post 1 -->
      <div class="post">
@@ -374,7 +381,7 @@ foreach ($userAndHisPosts as $post) {
                 <form method="POST" action="../../backend/php/likeAction.php">
                 
                     <input type="hidden" name="action" id="actionInput_'. $post['post_id'].'" value="'.$inputValue.'">
-                 <button type="button" id="likeBtn" onclick="like(event,'.$post['post_id'].')"><i id="actionIcon_'.$post['post_id'].'" class="'.$iconClass.'" style="color:' . $redColorBtn . ';"></i></button> <span>1,245 likes</span>
+                 <button type="button" id="likeBtn" onclick="like(event,'.$post['post_id'].')"><i id="actionIcon_'.$post['post_id'].'" class="'.$iconClass.'" style="color:' . $redColorBtn . ';"></i></button> <span>'.$numLikes.' likes</span>
                  </form>
 
 
