@@ -71,7 +71,26 @@ else {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
 <style>
- 
+ body{
+    background-color: #000000;
+
+ }
+ .profile-info {
+    
+    color: #fafafa;
+}
+ .post {
+    width: 30%; 
+    min-width: 250px;
+    background: white;
+    padding: 10px;
+    border-radius: 0px;
+    text-align: center;
+    margin: 0px 10px;
+}
+.bio {
+    color:  #fafafa;
+}
     .post .moreoptions{
    position: relative;
 }

@@ -1,5 +1,25 @@
 <?php
 require '../../backend/php/db-connection.php';
+function timeAgo($datetime) {
+    $timestamp = strtotime($datetime); // Convert string to timestamp
+    $timeDiff = time() - $timestamp; // Difference in seconds
+
+    if ($timeDiff < 60) { 
+        return "just now";
+    } elseif ($timeDiff < 3600) { 
+        return floor($timeDiff / 60) . " min ago";
+    } elseif ($timeDiff < 86400) { 
+        return floor($timeDiff / 3600) . " h ago";
+    } elseif ($timeDiff < 604800) { 
+        return floor($timeDiff / 86400) . " d ago";
+    } elseif ($timeDiff < 2419200) { 
+        return floor($timeDiff / 604800) . " w ago";
+    } elseif ($timeDiff < 29030400) { 
+        return floor($timeDiff / 2419200) . " mo ago";
+    } else { 
+        return floor($timeDiff / 29030400) . " y ago";
+    }
+}
 
 session_start();
 if(!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn']!=true){
@@ -30,6 +50,16 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
     header("Location: /instagram/frontend/pages/index.php?err=100");
    }   
 
+//retreive the name and posts of the users who are followed by the loggedin user and his name
+$sql2="SELECT u.id,u.username,u.profile_image,p.date_created,p.image_post,p.caption,p.post_id FROM posts
+ p INNER JOIN users u ON p.user_id=u.id INNER JOIN follow f ON f.following_id=p.user_id WHERE
+  f.follower_id=:id ORDER BY p.date_created DESC;";
+ $stmt=$pdo->prepare($sql2);
+ $stmt->bindParam(":id",$userId);
+ $stmt->execute();
+$usersWhoUserFollow = $stmt->fetchAll();
+
+    
     ?>
 
 <!DOCTYPE html>
@@ -41,6 +71,17 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
     <title>Document</title>
     <link rel="stylesheet" href="../css/style.css">
 <style>
+    .posts .post .headerpost .postinfo{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    gap: 8px;
+}
+.posts .post .headerpost .postinfo img {
+    border-color: transparent;
+}
     #followBtn{
     background: none;
     color: #0095f6;
@@ -310,28 +351,40 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
             </div>
 
 <!-- POSTS SECTION: -->
-
+<?php
+                foreach($usersWhoUserFollow as $post){
+                    $sql3="SELECT COUNT(*) FROM likes WHERE post_id=:id;";
+                    $stmt=$pdo->prepare($sql3);
+             $stmt->bindParam(":id",$post['post_id']);
+             $stmt->execute();
+            $result = $stmt->fetch();
+            $numOfLikesForEachPost = $result[0];
+                    echo $numOfLikesForEachPost;
+                echo '
             <div class="posts">
 
                 <div class="post">
 
+                
                     <header class="headerpost">
                         <div class="postinfo">
 
                             <div>
-                                <img src="../images/YoubeeLogo.png" alt="profile image">
+                                <img src="../images/'.$post['profile_image'].'" alt="profile image">
                             </div>
 
                             <div>
-                                <p style="font-size: 14px; font-weight: 700;">Youbee <svg aria-label="Verified"
+                            <a href="./profile.php?userId='.$post['id'].'" style="text-decoration:none;">
+                                <p style="font-size: 14px; font-weight: 700;">'.$post['username'].' <svg aria-label="Verified"
                                         class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img"
                                         viewBox="0 0 40 40" width="12">
                                         <title>Verified</title>
                                         <path
                                             d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"
                                             fill-rule="evenodd"></path>
-                                    </svg><span class="timepost">.10h</span></p>
-                                <p style="font-size: 12px;">Beirut, Lebanon</p>
+                                    </svg><span class="timepost"> '.timeAgo($post['date_created']).'</span>
+                                    </p>
+                                </a>
                             </div>
                         </div>
 
@@ -348,7 +401,7 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
 
 
                     <div class="postCont">
-                        <video src="./images/Creating Our Future - 6-second video 1.mp4" style="width: 100%; cursor: pointer;" autoplay></video>
+                        <img src="../postImages/'.$post['image_post'].'" style="width: 100%; cursor: pointer;">
                     </div>
 
                     <div class="actions">
@@ -391,16 +444,15 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
                         <img src="../images/profile.svg" alt="" style="width: 14px; height: 14px; color: white;">
                         <img src="../images/profile.svg" alt="" style="width: 14px; height: 14px; color: white;">
 
-                        <p style="display: inline;">1,500 likes</p>
-                        <p style="font-size: 14px; font-weight: 700;">Youbee <svg aria-label="Verified"
+                        <p style="display: inline;">'.$numOfLikesForEachPost. ' likes</p>
+                        <p style="font-size: 14px; font-weight: 700;">'.$post['username'].' <svg aria-label="Verified"
                                 class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img"
                                 viewBox="0 0 40 40" width="12">
                                 <title>Verified</title>
                                 <path
                                     d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"
                                     fill-rule="evenodd"></path>
-                            </svg> <span class="timepost">كيف بتبعت رسالة مخفية بالوتساب!! <span
-                                    style='font-size:14px;'>&#128526;</span></span></p>
+                            </svg> <span class="timepost">'.$post['caption'].' </p>
 
                     </div>
 
@@ -411,107 +463,12 @@ $usersWhoUserdontFollow = $stmt->fetchAll();
                 </div>
             
                 <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+            
+            </div>
                 
-                
-                <div class="post">
-
-                    
-                    <header class="headerpost">
-                        <div class="postinfo">
-
-                            <div>
-                                <img src="../images/YoubeeLogo.png" alt="profile image">
-                            </div>
-
-                            <div>
-                                <p style="font-size: 14px; font-weight: 700;">Youbee <svg aria-label="Verified"
-                                        class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img"
-                                        viewBox="0 0 40 40" width="12">
-                                        <title>Verified</title>
-                                        <path
-                                            d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"
-                                            fill-rule="evenodd"></path>
-                                    </svg><span class="timepost">.10h</span></p>
-                                <p style="font-size: 12px;">Beirut, Lebanon</p>
-                            </div>
-                        </div>
-
-                        <div class="moreoptions">
-                            <svg aria-label="More Options" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor"
-                                height="24" role="img" viewBox="0 0 24 24" width="24">
-                                <title>More Options</title>
-                                <circle cx="12" cy="12" r="1.5"></circle>
-                                <circle cx="6" cy="12" r="1.5"></circle>
-                                <circle cx="18" cy="12" r="1.5"></circle>
-                            </svg>
-                        </div>
-                    </header>
-
-
-                    <div class="postCont">
-<img src="../images//forbesquote.jpg" alt="post image">
-                    </div>
-
-                    <div class="actions">
-                        <div class="threeactions">
-                            <svg aria-label="Like" class="x1lliihq x1n2onr6 xyb1xck" fill="currentColor" height="24"
-                                role="img" viewBox="0 0 24 24" width="24">
-                                <title>Like</title>
-                                <path
-                                    d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z">
-                                </path>
-                            </svg>
-                            <svg aria-label="Comment" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24"
-                                role="img" viewBox="0 0 24 24" width="24">
-                                <title>Comment</title>
-                                <path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none"
-                                    stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path>
-                            </svg>
-                            <svg aria-label="Share" class="x1lliihq x1n2onr6 xyb1xck" fill="currentColor" height="24"
-                                role="img" viewBox="0 0 24 24" width="24">
-                                <title>Share</title>
-                                <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22"
-                                    x2="9.218" y1="3" y2="10.083"></line>
-                                <polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"
-                                    stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon>
-                            </svg>
-                        </div>
-
-                        <div>
-                            <svg aria-label="Save" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24"
-                                role="img" viewBox="0 0 24 24" width="24">
-                                <title>Save</title>
-                                <polygon fill="none" points="20 21 12 13.44 4 21 4 3 20 3 20 21" stroke="currentColor"
-                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polygon>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="reactions">
-                        <img src="../images/profile.svg" alt="" style="width: 14px; height: 14px; color: white;">
-                        <img src="../images/profile.svg" alt="" style="width: 14px; height: 14px; color: white;">
-                        <img src="../images/profile.svg" alt="" style="width: 14px; height: 14px; color: white;">
-
-                        <p style="display: inline;">1,500 likes</p>
-                        <p style="font-size: 14px; font-weight: 700;">Youbee <svg aria-label="Verified"
-                                class="x1lliihq x1n2onr6" fill="rgb(0, 149, 246)" height="12" role="img"
-                                viewBox="0 0 40 40" width="12">
-                                <title>Verified</title>
-                                <path
-                                    d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z"
-                                    fill-rule="evenodd"></path>
-                            </svg> <span class="timepost">كيف بتبعت رسالة مخفية بالوتساب!! <span
-                                    style='font-size:14px;'>&#128526;</span></span></p>
-
-                    </div>
-
-                    <div class="comment">
-                        <textarea name="comment" id="comment" placeholder="Add a comment"></textarea>
-                    </div>
-
-                </div>
-
-
+';
+                }
+?>
 <!-- Hidden Navbar  -->
 <div class="hiddenNavbar">
     <ul>
